@@ -6,6 +6,7 @@ import com.example.plazoleta.ms_usuarios.domain.exceptions.UnauthorizedException
 import com.example.plazoleta.ms_usuarios.domain.model.Role;
 import com.example.plazoleta.ms_usuarios.domain.model.User;
 import com.example.plazoleta.ms_usuarios.domain.ports.in.OwnerServicePort;
+import com.example.plazoleta.ms_usuarios.domain.utils.UserValidator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +31,7 @@ public class UserServiceImpl implements UserService {
     public User saveUser(User user, String role) {
         switch (role) {
             case "ADMIN":
+                UserValidator.validate(user);
                 user.setRole(Role.OWNER);
                 String hashed = passwordEncoder.encode(user.getPassword());
                 user.setPassword(hashed);
@@ -41,6 +43,14 @@ public class UserServiceImpl implements UserService {
 
 
     }
+
+    @Override
+    public void assignRestaurantToOwner(Long userId, Long restaurantId) {
+
+        ownerServicePort.assignRestaurantToOwner(userId, restaurantId); // delega al dominio
+    }
+
+
     @Override
     public List<User> getAllUsers() {
         return ownerServicePort.findAllUsers();

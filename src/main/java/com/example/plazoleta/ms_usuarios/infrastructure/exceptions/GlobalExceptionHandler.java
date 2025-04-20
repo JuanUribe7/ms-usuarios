@@ -1,20 +1,73 @@
 package com.example.plazoleta.ms_usuarios.infrastructure.exceptions;
 
-import com.example.plazoleta.ms_usuarios.domain.exceptions.UnauthorizedException;
+import com.example.plazoleta.ms_usuarios.domain.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<String> handleUnauthorized(UnauthorizedException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    // 1. Validaciones por anotaciones como @Email, @NotBlank, etc.
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            errors.put(error.getField(), error.getDefaultMessage());
+        }
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    // 2. Excepciones personalizadas - definidas por ti mismo
+    @ExceptionHandler(InvalidEmailException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidEmail(InvalidEmailException ex) {
+        return buildBadRequest(ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidPhoneException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidPhone(InvalidPhoneException ex) {
+        return buildBadRequest(ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidIdentityDocumentException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidId(InvalidIdentityDocumentException ex) {
+        return buildBadRequest(ex.getMessage());
+    }
+
+    @ExceptionHandler(MinorAgeException.class)
+    public ResponseEntity<Map<String, String>> handleMinorAge(MinorAgeException ex) {
+        return buildBadRequest(ex.getMessage());
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<Map<String, String>> handleUnauthorized(UnauthorizedException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleNotFound(NotFoundException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    // 3. Excepciones generales (fallback)
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGeneric(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno: " + ex.getMessage());
+    public ResponseEntity<Map<String, String>> handleGeneric(Exception ex) {
+        return buildResponse("Error interno: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // Métodos auxiliares para evitar duplicación
+    private ResponseEntity<Map<String, String>> buildBadRequest(String message) {
+        return buildResponse(message, HttpStatus.BAD_REQUEST);
+    }
+
+    private ResponseEntity<Map<String, String>> buildResponse(String message, HttpStatus status) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", message);
+        return ResponseEntity.status(status).body(response);
     }
 }

@@ -9,4 +9,5 @@ public interface UserPersistencePort {
     User saveUser(User user);
     List<User> findAll();
     Optional<User> findById(Long id);
+    void updateUser(User user);
 }

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 public interface UserService {
     User saveUser(User user, String role);
+    void assignRestaurantToOwner(Long userId, Long restaurantId);
    List<User> getAllUsers();
     Optional<User> getUserById(Long id);
 }

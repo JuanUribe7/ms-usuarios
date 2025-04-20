@@ -13,8 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class BeanConfiguration {
 
     @Bean(name = "ownerServicePort")
-    public OwnerServicePort ownerServicePort(UserPersistencePort userPersistencePort) {
-        return new OwnerUseCase(userPersistencePort);
+    public OwnerServicePort ownerServicePort(UserPersistencePort userPersistencePort, PasswordEncoder passwordEncoder) {
+        return new OwnerUseCase(userPersistencePort, passwordEncoder);
+
     }
 
     @Bean

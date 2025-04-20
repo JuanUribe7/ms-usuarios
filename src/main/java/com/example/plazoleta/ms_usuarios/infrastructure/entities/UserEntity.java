@@ -2,11 +2,18 @@ package com.example.plazoleta.ms_usuarios.infrastructure.entities;
 
 import com.example.plazoleta.ms_usuarios.domain.model.Role;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
 
+
+
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserEntity {
 
     @Id
@@ -21,95 +28,8 @@ public class UserEntity {
     private String email;
     private String password;
 
-
-    public UserEntity(Long id, String name, String lastName, String phone, LocalDate birthDate, String identityDocument, String password, Role role, String email) {
-        this.id = id;
-        this.name = name;
-        this.lastName = lastName;
-        this.phone = phone;
-        this.birthDate = birthDate;
-        this.identityDocument = identityDocument;
-        this.password = password;
-        this.role = role;
-        this.email = email;
-    }
-
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role;
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getIdentityDocument() {
-        return identityDocument;
-    }
-
-    public void setIdentityDocument(String identityDocument) {
-        this.identityDocument = identityDocument;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
+    private Long restaurantId;
 }

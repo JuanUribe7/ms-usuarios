@@ -12,13 +12,14 @@ public class User {
     private String email;
     private String password;
     private Role role;
+    private Long restaurantId;
 
 
 
 
     public User() {
     }
-    public User(Long id, String name, String lastName, String identityDocument, String phone, LocalDate birthDate, String email, String password, Role role) {
+    public User(Long id, String name, String lastName, String identityDocument, String phone, LocalDate birthDate, String email, String password, Role role, Long restaurantId) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -28,6 +29,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.role = role;
+        this.restaurantId = restaurantId;
     }
 
     // Getters y Setters
@@ -104,6 +106,7 @@ public class User {
         this.role = role;
     }
 
+    public Long getRestaurantId() {return restaurantId;}
 
-
+    public void setRestaurantId(Long restaurantId) {this.restaurantId = restaurantId;}
 }

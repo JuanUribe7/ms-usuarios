@@ -10,5 +10,6 @@ public interface OwnerServicePort {
     User saveUser(User user);
     List<User> findAllUsers();
     Optional<User> findById(Long id);
+    void assignRestaurantToOwner(Long id, Long restaurantId);
 
 }

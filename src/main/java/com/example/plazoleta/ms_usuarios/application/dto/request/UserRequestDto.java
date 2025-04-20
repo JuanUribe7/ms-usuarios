@@ -1,18 +1,29 @@
 package com.example.plazoleta.ms_usuarios.application.dto.request;
 
 import com.example.plazoleta.ms_usuarios.domain.model.Role;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserRequestDto {
 
-    private String name;
+    @NotBlank private String name;
     private String lastName;
-    private String identityDocument;
+    @NotBlank private String identityDocument;
     private String phone;
     private LocalDate birthDate;
     private String email;
-    private String password;
+    @NotBlank private String password;
+    @NotNull(message = "El rol no puede ser nulo")
     private Role role;
     private Long restaurantId;
 
